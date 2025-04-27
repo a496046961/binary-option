@@ -21,7 +21,8 @@ target/
 input/target
 common/target
 monitor-admin/target
-logs
+logs/binance-java-connector
+logs/binance-java-connector.log
 
 ### NetBeans ###
 /nbproject/private/

@@ -69,6 +69,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.25.2</version>
+        </dependency>
         <!--若使用redisTemplate作为分布式锁底层，则需要引入-->
         <dependency>
             <groupId>com.baomidou</groupId>

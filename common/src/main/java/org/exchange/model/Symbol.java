@@ -3,7 +3,6 @@ package org.exchange.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 
 import java.io.Serializable;
 
@@ -42,6 +41,8 @@ public class Symbol implements Serializable {
      */
     private Integer scale;
 
+    private String followName;
+
     /**
      * 跟随的数据
      */
@@ -56,6 +57,8 @@ public class Symbol implements Serializable {
      * 类型，1:数字货币，2:期货，3:指数
      */
     private Integer type;
+
+    private String returnRateConf;
 
     public Long getId() {
         return id;
@@ -127,5 +130,42 @@ public class Symbol implements Serializable {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getReturnRateConf() {
+        return returnRateConf;
+    }
+
+    public void setReturnRateConf(String returnRateConf) {
+        this.returnRateConf = returnRateConf;
+    }
+
+
+    public String getFollowName() {
+        return followName;
+    }
+
+    public void setFollowName(String followName) {
+        this.followName = followName;
+    }
+
+    public Symbol() {
+    }
+
+    @Override
+    public String toString() {
+        return "Symbol{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", baseCoin='" + baseCoin + '\'' +
+                ", quoteCoin='" + quoteCoin + '\'' +
+                ", scale=" + scale +
+                ", followName='" + followName + '\'' +
+                ", followInput='" + followInput + '\'' +
+                ", dataSource='" + dataSource + '\'' +
+                ", type=" + type +
+                ", returnRateConf='" + returnRateConf + '\'' +
+                '}';
     }
 }

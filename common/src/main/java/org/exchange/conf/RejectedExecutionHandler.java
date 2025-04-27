@@ -1,8 +1,8 @@
 package org.exchange.conf;
 
 
-
-
+import  org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 public class RejectedExecutionHandler implements java.util.concurrent.RejectedExecutionHandler {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RejectedExecutionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(RejectedExecutionHandler.class);
 
     /**
      * 线程池关闭时，为避免任务丢失，留下处理方法

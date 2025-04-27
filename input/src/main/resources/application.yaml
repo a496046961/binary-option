@@ -53,3 +53,12 @@ mqtt:
   username: admin # ??
   password: aa123456789 # ??
   topic: test/topic
+
+
+logging:
+  level:
+    root: info
+    sql: info
+    web: info
+  file:
+    name: input
