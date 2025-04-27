@@ -21,6 +21,7 @@ target/
 input/target
 common/target
 monitor-admin/target
+logs
 
 ### NetBeans ###
 /nbproject/private/
