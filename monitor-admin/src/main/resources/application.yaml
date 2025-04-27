@@ -1,0 +1,16 @@
+spring:
+  application:
+   name: monitor-admin
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  port: 10000
