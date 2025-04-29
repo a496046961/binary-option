@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 @TableName("t_symbol")
@@ -58,7 +59,15 @@ public class Symbol implements Serializable {
      */
     private Integer type;
 
+    /**
+     * 回报率
+     */
     private String returnRateConf;
+
+    /**
+     * 手续费
+     */
+    private BigDecimal fee;
 
     public Long getId() {
         return id;
@@ -147,6 +156,14 @@ public class Symbol implements Serializable {
 
     public void setFollowName(String followName) {
         this.followName = followName;
+    }
+
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public Symbol() {

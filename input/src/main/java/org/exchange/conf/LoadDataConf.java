@@ -22,7 +22,7 @@ public class LoadDataConf {
 
     public void load(Symbol symbol) {
         if (symbol.getDataSource().equalsIgnoreCase(BINANCE.name())) { // 币安的数据源
-            initBinance.initBinance(symbol);
+            //initBinance.initBinance(symbol);
         } else if (symbol.getDataSource().equalsIgnoreCase(BITGIT.name())) { // bitgit
             initBitgit.initBitgit(symbol);
         } else if (symbol.getDataSource().equalsIgnoreCase(INVESTING.name())) { // 英为

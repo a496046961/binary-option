@@ -1,10 +1,11 @@
 package org.exchange.conf;
 
 import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
 import org.exchange.binance.InitBinance;
 import org.exchange.model.Symbol;
 import org.exchange.service.SymbolService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +14,11 @@ import java.util.List;
 
 import static org.exchange.constant.DataSource.BINANCE;
 
-
-@Slf4j
 @Component
 public class InitConf implements InitializingBean {
 
+
+    private static final Logger log = LoggerFactory.getLogger(InitConf.class);
     @Resource
     SymbolService symbolService;
 
