@@ -23,6 +23,11 @@ public class Wallet implements Serializable {
     private Long id;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 币种名称
      */
     private String coinName;
@@ -121,5 +126,13 @@ public class Wallet implements Serializable {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

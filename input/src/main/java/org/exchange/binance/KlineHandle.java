@@ -11,6 +11,7 @@ import org.exchange.constant.TopicConstant;
 import org.exchange.model.Kline;
 import org.exchange.model.Symbol;
 import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
 import static org.exchange.utils.BigDecimalUtils.parseBigDecimal;
@@ -19,7 +20,7 @@ import static org.exchange.utils.BigDecimalUtils.parseBigDecimal;
 public class KlineHandle {
 
     @Resource
-    Redisson redisson;
+    RedissonClient redissonClient;
 
     public void loadKline(Symbol symbol, UMWebsocketClientImpl umWebsocketClient) {
         for (KlineEnum value : KlineEnum.values()) {
@@ -38,7 +39,7 @@ public class KlineHandle {
                     kline.setAmount(parseBigDecimal(binanceKline.getQ()));
                     kline.setInterval(binanceKline.getI());
                     kline.setSymbol(binanceKline.getS());
-                    redisson.getTopic(TopicConstant.kLINE).publish(kline);
+                    redissonClient.getTopic(TopicConstant.kLINE).publish(kline);
                 }
             });
         }

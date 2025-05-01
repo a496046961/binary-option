@@ -14,15 +14,14 @@ import okio.ByteString;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.exchange.adapter.BitgitTicker;
-import org.exchange.adapter.Ticker;
 import org.exchange.bitgit.entity.JsonBean;
 import org.exchange.bitgit.entity.TickerData;
 import org.exchange.constant.KlineEnum;
+import org.exchange.model.Ticker;
 import org.exchange.constant.TopicConstant;
 import org.exchange.model.Kline;
 import org.jetbrains.annotations.NotNull;
-import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -32,9 +31,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static org.exchange.utils.BigDecimalUtils.parseBigDecimal;
 
 @Component
 public class OkWebSocketHandle {
@@ -49,7 +49,7 @@ public class OkWebSocketHandle {
     static WebSocket webSocket = null;
 
     @Resource
-    Redisson redisson;
+    RedissonClient redissonClient;
 
     public WebSocket initClient() {
         System.out.println("init Client");
@@ -76,7 +76,6 @@ public class OkWebSocketHandle {
 
             @Override
             public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-                System.out.println("接收的数据是： " + text);
                 try {
                     JsonBean jsonBean = JSON.parseObject(text, new TypeReference<JsonBean>() {
                     });
@@ -84,33 +83,54 @@ public class OkWebSocketHandle {
                         if (StringUtils.isNotBlank(jsonBean.getData())) {
                             List<TickerData> tickerDataList = JSON.parseArray(jsonBean.getData(), TickerData.class);
                             for (TickerData tickerData : tickerDataList) {
-                                Ticker ticker = new BitgitTicker(tickerData);
-                                redisson.getTopic(TopicConstant.TICKER).publish(ticker);
+                                org.exchange.model.Ticker ticker1 = new org.exchange.model.Ticker();
+                                ticker1.setSymbol(tickerData.getInstId());
+                                ticker1.setLastPrice(parseBigDecimal(tickerData.getLast()));
+                                ticker1.setPriceChange(parseBigDecimal(tickerData.getChgUTC()));
+                                ticker1.setPriceChangePercent(parseBigDecimal(tickerData.getPriceChangePercent()));
+                                ticker1.setOpen(parseBigDecimal(tickerData.getOpenUtc()));
+                                ticker1.setClose(parseBigDecimal(tickerData.getLast()));
+                                ticker1.setVolume(parseBigDecimal(tickerData.getBaseVolume()));
+                                ticker1.setHighPrice(parseBigDecimal(tickerData.getHigh24h()));
+                                ticker1.setLowPrice(parseBigDecimal(tickerData.getLow24h()));
+                                ticker1.setBaseVolume(parseBigDecimal(tickerData.getBaseVolume()));
+                                ticker1.setQuoteVolume(parseBigDecimal(tickerData.getQuoteVolume()));
+                                ticker1.setIndexPrice(parseBigDecimal(tickerData.getIndexPrice()));
+
+                                long l = redissonClient.getTopic(TopicConstant.TICKER).publish(ticker1);
+                                log.info("发送： {}", l);
                             }
                         }
                     } else if (jsonBean.getArg().getChannel().contains(KLINE)) { // k线
-                        JSONArray array = JSON.parseArray(jsonBean.getData());
-                        if (CollectionUtils.isNotEmpty(array)) {
-                            String channel = jsonBean.getArg().getChannel();
-                            String interval = null;
-                            for (KlineEnum klineEnum : KlineEnum.values()) {
-                                if (klineEnum.getBitgitInterval().equalsIgnoreCase(channel)) {
-                                    interval = klineEnum.getInterval();
-                                }
-                            }
-
-                            String instId = jsonBean.getArg().getInstId();
-                            Kline kline = new Kline();
-                            kline.setSymbol(instId);
-                            kline.setInterval(interval);
-                            kline.setTimestamp(array.getLong(0));
-                            kline.setOpen(array.getBigDecimal(1));
-                            kline.setHigh(array.getBigDecimal(2));
-                            kline.setLow(array.getBigDecimal(3));
-                            kline.setClose(array.getBigDecimal(4));
-                            kline.setVolume(array.getBigDecimal(5));
-                            redisson.getTopic(TopicConstant.kLINE).publish(kline);
+                        if (StringUtils.isBlank(jsonBean.getData())) {
+                            return;
                         }
+                        JSONArray array = JSON.parseArray(jsonBean.getData());
+                        for (Object o : array) {
+                            JSONArray array1 = JSON.parseArray(o.toString());
+                            if (CollectionUtils.isNotEmpty(array1)) {
+
+                                String channel = jsonBean.getArg().getChannel();
+                                String interval = null;
+                                for (KlineEnum klineEnum : KlineEnum.values()) {
+                                    if (klineEnum.getBitgitInterval().equalsIgnoreCase(channel)) {
+                                        interval = klineEnum.getInterval();
+                                    }
+                                }
+                                String instId = jsonBean.getArg().getInstId();
+                                Kline kline = new Kline();
+                                kline.setSymbol(instId);
+                                kline.setInterval(interval);
+                                kline.setTimestamp(array1.getLong(0));
+                                kline.setOpen(array1.getBigDecimal(1));
+                                kline.setHigh(array1.getBigDecimal(2));
+                                kline.setLow(array1.getBigDecimal(3));
+                                kline.setClose(array1.getBigDecimal(4));
+                                kline.setVolume(array1.getBigDecimal(5));
+                                redissonClient.getTopic(TopicConstant.kLINE).publish(kline);
+                            }
+                        }
+
                     }
                 } catch (Exception e) {
                     log.error("异常：", e);

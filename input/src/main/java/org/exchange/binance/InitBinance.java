@@ -14,7 +14,6 @@ public class InitBinance {
 
     private volatile static UMWebsocketClientImpl umWebsocketClient = new UMWebsocketClientImpl();
 
-
     @Resource
     TickerHandle tickerHandle;
     @Resource
