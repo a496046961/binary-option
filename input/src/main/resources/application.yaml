@@ -37,7 +37,7 @@ spring:
     virtual:
       enabled: true
 
-# ????????
+
 management:
   endpoints:
     web:
@@ -48,10 +48,10 @@ management:
       show-details: ALWAYS
 
 mqtt:
-  host: tcp://localhost:18083 # MQTT ?????
+  host: tcp://localhost:18083
   clientId: data
-  username: admin # ??
-  password: aa123456789 # ??
+  username: admin
+  password: aa123456789
   topic: test/topic
 
 

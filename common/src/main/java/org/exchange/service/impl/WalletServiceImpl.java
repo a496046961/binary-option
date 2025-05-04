@@ -12,6 +12,7 @@ import org.exchange.model.Wallet;
 import org.exchange.service.WalletLogService;
 import org.exchange.service.WalletService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Slf4j
-@Mapper
+@Service
 public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> implements WalletService {
 
 
