@@ -3,6 +3,7 @@ package org.exchange.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,16 +43,19 @@ public class Symbol implements Serializable {
      */
     private Integer scale;
 
+    @JsonIgnore
     private String followName;
 
     /**
      * 跟随的数据
      */
+    @JsonIgnore
     private String followInput;
 
     /**
      * 数据源
      */
+    @JsonIgnore
     private String dataSource;
 
     /**

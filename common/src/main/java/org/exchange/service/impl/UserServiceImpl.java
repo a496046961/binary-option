@@ -75,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             StpUtil.login(user.getId());
             String tokenValue = StpUtil.getTokenValue();
-            return MessageResult.success(tokenValue);
+            return MessageResult.success("SUCCESS", tokenValue);
         } catch (Exception e) {
             log.error("注册异常：", e);
         }
@@ -87,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public MessageResult registerEmail(String email, String password, String code, String invitationCode, HttpServletRequest request) {
         try {
             if (this.lambdaQuery().eq(User::getEmail, email).exists()) {
-                return MessageResult.error(" This account already exists ");
+                return MessageResult.error(" This email already exists ");
             }
             RBucket<Object> bucket = redissonClient.getBucket(RedisKeyConstant.CAPTCHA.concat(request.getSession().getId()));
             if (!bucket.get().toString().equalsIgnoreCase(code)) { // 验证码不对
@@ -121,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             StpUtil.login(user.getId());
             String tokenValue = StpUtil.getTokenValue();
-            return MessageResult.success(tokenValue);
+            return MessageResult.success("SUCCESS", tokenValue);
         } catch (Exception e) {
             log.error("邮箱注册异常", e);
         }
@@ -139,8 +139,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public MessageResult login(String username, String password, String code, HttpServletRequest request) {
         try {
-            RBucket<Object> bucket = redissonClient.getBucket(RedisKeyConstant.CAPTCHA.concat(request.getSession().getId()));
-            if (!bucket.get().toString().equalsIgnoreCase(code)) { // 验证码不对
+            String key =RedisKeyConstant.CAPTCHA.concat(request.getSession().getId());
+
+            RBucket<Object> bucket = redissonClient.getBucket(key);
+            log.info("key:{}, value: {}, input code :{}", key, bucket.get(), code);
+            if (!bucket.get().equals(code)) { // 验证码不对
                 return MessageResult.error(" Verification code input error ");
             } else {
                 bucket.delete();
@@ -153,7 +156,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             StpUtil.login(user.getId());
             String tokenValue = StpUtil.getTokenValue();
 
-            return MessageResult.success(tokenValue);
+            return MessageResult.success("success",tokenValue);
         } catch (Exception e) {
             log.error("登陆异常： ", e);
         }

@@ -72,3 +72,8 @@ sa-token:
   token-style: random-128
   # ????????
   is-log: false
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

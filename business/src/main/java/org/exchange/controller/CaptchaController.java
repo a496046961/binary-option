@@ -2,9 +2,7 @@ package org.exchange.controller;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
-import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.captcha.generator.RandomGenerator;
-import cn.hutool.core.lang.generator.Generator;
 import cn.hutool.core.util.RandomUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

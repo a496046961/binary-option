@@ -2,8 +2,10 @@ package org.exchange.consumer;
 
 import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
+import org.exchange.constant.RedisKeyConstant;
 import org.exchange.model.Ticker;
 import org.exchange.constant.TopicConstant;
+import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class TickerConsumer implements InitializingBean {
             @Override
             public void onMessage(CharSequence charSequence, Ticker ticker) {
                 log.info("receive ticker: {}", JSON.toJSONString(ticker));
+                RBucket<Ticker> bucket = redissonClient.getBucket(RedisKeyConstant.TICKER.concat(ticker.getSymbol()));
+                bucket.set(ticker);
             }
         });
     }

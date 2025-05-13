@@ -24,7 +24,9 @@ public class InvitationStatisticsServiceImpl extends ServiceImpl<InvitationStati
     @Override
     public void updateCount(long userid) {
         InvitationStatistics statistics = this.lambdaQuery().eq(InvitationStatistics::getUserId, userid).one();
-        statistics.setCount(statistics.getCount() + 1);
-        this.updateById(statistics);
+        if (statistics != null) {
+            statistics.setCount(statistics.getCount() + 1);
+            this.updateById(statistics);
+        }
     }
 }

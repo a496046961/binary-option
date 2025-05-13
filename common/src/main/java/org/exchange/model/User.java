@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@TableName("user")
+@TableName("t_user")
 public class User implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;                    // 用户唯一标识，主键，自增
