@@ -51,11 +51,11 @@ management:
       show-details: ALWAYS
 
 mqtt:
-  host: tcp://localhost:18083 # MQTT ?????
+  host: tcp://192.168.1.109:18083
   clientId: data
-  username: admin # ??
-  password: aa123456789 # ??
-  topic: test/topic
+  username: admin
+  password: aa123456789
+  topic: ticker
 
 
 logging:

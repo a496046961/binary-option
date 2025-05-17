@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SymbolService extends IService<Symbol> {
 
-    List<SymbolVo> getSymbols();
+    List<SymbolVo> getSymbols(int type);
 
 }

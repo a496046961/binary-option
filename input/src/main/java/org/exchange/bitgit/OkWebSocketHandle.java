@@ -21,6 +21,7 @@ import org.exchange.model.Ticker;
 import org.exchange.constant.TopicConstant;
 import org.exchange.model.Kline;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public class OkWebSocketHandle {
                                 ticker1.setIndexPrice(parseBigDecimal(tickerData.getIndexPrice()));
 
                                 long l = redissonClient.getTopic(TopicConstant.TICKER).publish(ticker1);
-                                log.info("发送： {}", l);
+
                             }
                         }
                     } else if (jsonBean.getArg().getChannel().contains(KLINE)) { // k线
@@ -142,6 +143,26 @@ public class OkWebSocketHandle {
                 // super.onMessage(webSocket, bytes);
                 String s = uncompress(bytes.toByteArray());
                 System.out.println("bytes 接收的数据是 " + s);
+            }
+
+            @Override
+            public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+                log.info("onClosed: {}", reason);
+                InitBitgit.STATUS = false;
+            }
+
+            @Override
+            public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+                log.info("onClosing: {}", reason);
+                InitBitgit.STATUS = false;
+            }
+
+            @Override
+            public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
+               log.error("onFailure: ", t);
+               webSocket.close(4950, "主动关闭");
+               InitBitgit.STATUS = false;
+               webSocket = null;
             }
         });
         return webSocket;

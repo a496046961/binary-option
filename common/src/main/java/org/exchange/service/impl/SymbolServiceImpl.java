@@ -1,5 +1,7 @@
 package org.exchange.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +27,10 @@ public class SymbolServiceImpl extends ServiceImpl<SymbolMapper, Symbol> impleme
     RedissonClient redissonClient;
 
     @Override
-    public List<SymbolVo> getSymbols() {
-        List<Symbol> symbolList = this.list();
+    public List<SymbolVo> getSymbols(int type) {
+        LambdaQueryWrapper<Symbol> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Symbol::getType, type);
+        List<Symbol> symbolList = this.list(queryWrapper);
 
         List<SymbolVo> list = new ArrayList<>(symbolList.size());
 
@@ -35,8 +39,10 @@ public class SymbolServiceImpl extends ServiceImpl<SymbolMapper, Symbol> impleme
             BeanUtils.copyProperties(symbol, symbolVo);
 
             String key = RedisKeyConstant.TICKER.concat(symbol.getSymbol().toUpperCase());
-            RBucket<Ticker> bucket = redissonClient.getBucket(key);
-            Ticker ticker = bucket.get();
+            RBucket<String> bucket = redissonClient.getBucket(key);
+            String s = bucket.get();
+
+            Ticker ticker = JSON.parseObject(s, Ticker.class);
 
             symbolVo.setOpen(ticker.getOpen());
             symbolVo.setClose(ticker.getClose());
@@ -44,7 +50,7 @@ public class SymbolServiceImpl extends ServiceImpl<SymbolMapper, Symbol> impleme
             symbolVo.setLowPrice(ticker.getLowPrice());
             symbolVo.setHighPrice(ticker.getHighPrice());
             symbolVo.setPriceChange(ticker.getPriceChange());
-            symbolVo.setPriceChange(ticker.getPriceChange());
+            symbolVo.setPriceChangePercent(ticker.getPriceChangePercent());
             list.add(symbolVo);
         }
 

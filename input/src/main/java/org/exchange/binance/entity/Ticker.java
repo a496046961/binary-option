@@ -1,168 +1,249 @@
 package org.exchange.binance.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.math.BigDecimal;
 
 public class Ticker {
-    @JSONField(name = "e")
-    private String e;  // 事件类型
-    @JSONField(name = "E")
-    private long tE;   // 事件时间
-    private String s;  // 交易对
-    private String p;  // 24小时价格变化
-    private String P;  // 24小时价格变化(百分比)
-    private String w;  // 平均价格
-    private String c;  // 最新成交价格
-    private String Q;  // 最新成交价格上的成交量
-    private String o;  // 24小时内第一比成交的价格
-    private String h;  // 24小时内最高成交价
-    private String l;  // 24小时内最低成交价
-    private String v;  // 24小时内成交量
-    private String q;  // 24小时内成交额
-    private long O;   // 统计开始时间
+    @JsonProperty("e")
+    private  String eventType;
 
-    private long F;   // 24小时内第一笔成交交易ID
-    private long L;   // 24小时内最后一笔成交交易ID
-    private long n;   // 24小时内成交数
+    @JsonProperty("E")
+    private  long eventTime;
 
-    // Getters and Setters
-    public String gete() {
-        return e;
+    @JsonProperty("s")
+    private  String symbol;
+
+    @JsonProperty("p")
+    private  BigDecimal priceChange;
+
+    @JsonProperty("P")
+    private  BigDecimal priceChangePercent;
+
+    @JsonProperty("w")
+    private  BigDecimal weightedAveragePrice;
+
+    @JsonProperty("c")
+    private  BigDecimal lastPrice;
+
+    @JsonProperty("Q")
+    private  BigDecimal lastQuantity;
+
+    @JsonProperty("o")
+    private  BigDecimal openPrice;
+
+    @JsonProperty("h")
+    private  BigDecimal highPrice;
+
+    @JsonProperty("l")
+    private BigDecimal lowPrice;
+
+    @JsonProperty("v")
+    private  BigDecimal baseVolume;
+
+    @JsonProperty("q")
+    private  BigDecimal quoteVolume;
+
+    @JsonProperty("O")
+    private  long openTime;
+
+    @JsonProperty("C")
+    private  long closeTime;
+
+    @JsonProperty("F")
+    private  long firstTradeId;
+
+    @JsonProperty("L")
+    private  long lastTradeId;
+
+    @JsonProperty("n")
+    private  int numberOfTrades;
+
+    public String getEventType() {
+        return eventType;
     }
 
-    public void sete(String e) {
-        this.e = e;
+    public long getEventTime() {
+        return eventTime;
     }
 
-    public long getTe() {
-        return tE;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setTe(long E) {
-        this.tE = E;
+    public BigDecimal getPriceChange() {
+        return priceChange;
     }
 
-    public String getS() {
-        return s;
+    public BigDecimal getPriceChangePercent() {
+        return priceChangePercent;
     }
 
-    public void setS(String s) {
-        this.s = s;
+    public BigDecimal getWeightedAveragePrice() {
+        return weightedAveragePrice;
     }
 
-    public String getP() {
-        return p;
+    public BigDecimal getLastPrice() {
+        return lastPrice;
     }
 
-    public void setP(String p) {
-        this.p = p;
+    public BigDecimal getLastQuantity() {
+        return lastQuantity;
     }
 
-    public String getPPercent() {
-        return P;
+    public BigDecimal getOpenPrice() {
+        return openPrice;
     }
 
-    public void setPPercent(String P) {
-        this.P = P;
+    public BigDecimal getHighPrice() {
+        return highPrice;
     }
 
-    public String getW() {
-        return w;
+    public BigDecimal getLowPrice() {
+        return lowPrice;
     }
 
-    public void setW(String w) {
-        this.w = w;
+    public BigDecimal getBaseVolume() {
+        return baseVolume;
     }
 
-    public String getC() {
-        return c;
+    public BigDecimal getQuoteVolume() {
+        return quoteVolume;
     }
 
-    public void setC(String c) {
-        this.c = c;
+    public long getOpenTime() {
+        return openTime;
     }
 
-    public String getQ() {
-        return Q;
+    public long getCloseTime() {
+        return closeTime;
     }
 
-    public void setQ(String Q) {
-        this.Q = Q;
+    public long getFirstTradeId() {
+        return firstTradeId;
     }
 
-    public String getO() {
-        return o;
+    public long getLastTradeId() {
+        return lastTradeId;
     }
 
-    public void setO(String o) {
-        this.o = o;
+    public int getNumberOfTrades() {
+        return numberOfTrades;
     }
 
-    public String getH() {
-        return h;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
-    public void setH(String h) {
-        this.h = h;
+    public void setEventTime(long eventTime) {
+        this.eventTime = eventTime;
     }
 
-    public String getL() {
-        return l;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public void setL(String l) {
-        this.l = l;
+    public void setPriceChange(BigDecimal priceChange) {
+        this.priceChange = priceChange;
     }
 
-    public String getV() {
-        return v;
+    public void setPriceChangePercent(BigDecimal priceChangePercent) {
+        this.priceChangePercent = priceChangePercent;
     }
 
-    public void setV(String v) {
-        this.v = v;
+    public void setWeightedAveragePrice(BigDecimal weightedAveragePrice) {
+        this.weightedAveragePrice = weightedAveragePrice;
     }
 
-    public String getQAmount() {
-        return q;
+    public void setLastPrice(BigDecimal lastPrice) {
+        this.lastPrice = lastPrice;
     }
 
-    public void setQAmount(String q) {
-        this.q = q;
+    public void setLastQuantity(BigDecimal lastQuantity) {
+        this.lastQuantity = lastQuantity;
     }
 
-    public long getOStartTime() {
-        return O;
+    public void setOpenPrice(BigDecimal openPrice) {
+        this.openPrice = openPrice;
     }
 
-    public void setOStartTime(long O) {
-        this.O = O;
+    public void setHighPrice(BigDecimal highPrice) {
+        this.highPrice = highPrice;
     }
 
-
-
-    public long getFFirstTradeId() {
-        return F;
+    public void setLowPrice(BigDecimal lowPrice) {
+        this.lowPrice = lowPrice;
     }
 
-    public void setFFirstTradeId(long F) {
-        this.F = F;
+    public void setBaseVolume(BigDecimal baseVolume) {
+        this.baseVolume = baseVolume;
     }
 
-    public long getLLastTradeId() {
-        return L;
+    public void setQuoteVolume(BigDecimal quoteVolume) {
+        this.quoteVolume = quoteVolume;
     }
 
-    public void setLLastTradeId(long L) {
-        this.L = L;
+    public void setOpenTime(long openTime) {
+        this.openTime = openTime;
     }
 
-    public long getNTradeCount() {
-        return n;
+    public void setCloseTime(long closeTime) {
+        this.closeTime = closeTime;
     }
 
-    public void setNTradeCount(long n) {
-        this.n = n;
+    public void setFirstTradeId(long firstTradeId) {
+        this.firstTradeId = firstTradeId;
+    }
+
+    public void setLastTradeId(long lastTradeId) {
+        this.lastTradeId = lastTradeId;
+    }
+
+    public void setNumberOfTrades(int numberOfTrades) {
+        this.numberOfTrades = numberOfTrades;
     }
 
     public Ticker(){}
+
+    public Ticker(
+            @JsonProperty("e") String eventType,
+            @JsonProperty("E") long eventTime,
+            @JsonProperty("s") String symbol,
+            @JsonProperty("p") BigDecimal priceChange,
+            @JsonProperty("P") BigDecimal priceChangePercent,
+            @JsonProperty("w") BigDecimal weightedAveragePrice,
+            @JsonProperty("c") BigDecimal lastPrice,
+            @JsonProperty("Q") BigDecimal lastQuantity,
+            @JsonProperty("o") BigDecimal openPrice,
+            @JsonProperty("h") BigDecimal highPrice,
+            @JsonProperty("l") BigDecimal lowPrice,
+            @JsonProperty("v") BigDecimal baseVolume,
+            @JsonProperty("q") BigDecimal quoteVolume,
+            @JsonProperty("O") long openTime,
+            @JsonProperty("C") long closeTime,
+            @JsonProperty("F") long firstTradeId,
+            @JsonProperty("L") long lastTradeId,
+            @JsonProperty("n") int numberOfTrades
+    ) {
+        this.eventType = eventType;
+        this.eventTime = eventTime;
+        this.symbol = symbol;
+        this.priceChange = priceChange;
+        this.priceChangePercent = priceChangePercent;
+        this.weightedAveragePrice = weightedAveragePrice;
+        this.lastPrice = lastPrice;
+        this.lastQuantity = lastQuantity;
+        this.openPrice = openPrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.baseVolume = baseVolume;
+        this.quoteVolume = quoteVolume;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.firstTradeId = firstTradeId;
+        this.lastTradeId = lastTradeId;
+        this.numberOfTrades = numberOfTrades;
+    }
 
 }

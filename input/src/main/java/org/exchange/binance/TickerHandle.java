@@ -26,24 +26,22 @@ public class TickerHandle {
 
     public void loadTicker(Symbol symbol, UMWebsocketClientImpl umWebsocketClient) {
         umWebsocketClient.symbolTicker(symbol.getFollowName(), (message) -> {
-            log.info("接收的数据是：{}", message);
             Ticker ticker = JSON.parseObject(message, new TypeReference<org.exchange.binance.entity.Ticker>() {
             });
             org.exchange.model.Ticker ticker1 = new org.exchange.model.Ticker();
-            ticker1.setSymbol(ticker.getS());
-            ticker1.setLastPrice(parseBigDecimal(ticker.getC()));
-            ticker1.setPriceChange(parseBigDecimal(ticker.getP()));
-            ticker1.setPriceChangePercent(parseBigDecimal(ticker.getPPercent()));
-            ticker1.setOpen(parseBigDecimal(ticker.getO()));
-            ticker1.setClose(parseBigDecimal(ticker.getC()));
-            ticker1.setVolume(parseBigDecimal(ticker.getV()));
-            ticker1.setHighPrice(parseBigDecimal(ticker.getH()));
-            ticker1.setLowPrice(parseBigDecimal(ticker.getL()));
-            ticker1.setBaseVolume(parseBigDecimal(ticker.getV()));
-            ticker1.setQuoteVolume(parseBigDecimal(ticker.getQ()));
+            ticker1.setSymbol(ticker.getSymbol());
+            ticker1.setLastPrice(ticker.getLastPrice());
+            ticker1.setPriceChange(ticker.getPriceChange());
+            ticker1.setPriceChangePercent(ticker.getPriceChangePercent());
+            ticker1.setOpen(ticker.getOpenPrice());
+            ticker1.setClose(ticker.getLastPrice());
+            ticker1.setVolume(ticker.getBaseVolume());
+            ticker1.setHighPrice(ticker.getHighPrice());
+            ticker1.setLowPrice(ticker.getLowPrice());
+            ticker1.setBaseVolume(ticker.getBaseVolume());
+            ticker1.setQuoteVolume(ticker.getQuoteVolume());
 
-            long l = redissonClient.getTopic(TopicConstant.TICKER).publish(ticker1);
-            log.info("发送： {}", l);
+            redissonClient.getTopic(TopicConstant.TICKER).publish(ticker1);
         });
     }
 

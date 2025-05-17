@@ -1,4 +1,4 @@
-package org.exchange;
+package org.exchange.controller;
 
 import jakarta.annotation.Resource;
 import org.exchange.model.MessageResult;
@@ -18,8 +18,8 @@ public class SymbolController {
     SymbolService symbolService;
 
     @GetMapping("")
-    public MessageResult getSymbol(String symbol) {
-        List<SymbolVo> list = symbolService.getSymbols();
+    public MessageResult getSymbol(int type) {
+        List<SymbolVo> list = symbolService.getSymbols(type);
         return MessageResult.success(list);
     }
 

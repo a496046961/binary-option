@@ -79,6 +79,13 @@
             <artifactId>commons-compress</artifactId>
             <version>1.18</version>
         </dependency>
+        <dependency>
+            <groupId>com.upex.contract</groupId>
+            <artifactId>bitget-java-sdk-api</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bitget-java-sdk-api-1.0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
