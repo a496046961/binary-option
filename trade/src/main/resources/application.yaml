@@ -8,12 +8,10 @@ server:
 spring:
   application:
     name: trade
+  profiles:
+    active: dev
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/binary-option?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
-    username: root
-    password: 12345678
-    type: com.mysql.cj.jdbc.MysqlDataSource
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
@@ -21,20 +19,11 @@ spring:
     allow-circular-references: true
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      database: 3
-      password: Aq23-hjPwFB3mBDNFp3W1
       lettuce:
         pool:
           max-idle: 10
           max-active: 20
           min-idle: 1
-
-  boot:
-    admin:
-      client:
-        url: http://127.0.0.1:10000
 
   threads:
     virtual:

@@ -1,5 +1,8 @@
 package org.exchange.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -7,6 +10,9 @@ import java.math.BigDecimal;
 public class Kline implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 交易对
@@ -122,6 +128,14 @@ public class Kline implements Serializable {
 
     public void setInterval(String interval) {
         this.interval = interval;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Kline(){}

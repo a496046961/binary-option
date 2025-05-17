@@ -37,7 +37,13 @@ public class KlineHandle {
                     kline.setLow(parseBigDecimal(binanceKline.getL()));
                     kline.setVolume(parseBigDecimal(binanceKline.getV()));
                     kline.setAmount(parseBigDecimal(binanceKline.getQ()));
-                    kline.setInterval(binanceKline.getI());
+                    String interval = null;
+                    for (KlineEnum klineEnum : KlineEnum.values()) {
+                        if (klineEnum.getBinanceInterval().equalsIgnoreCase(binanceKline.getI())) {
+                            interval = klineEnum.getInterval();
+                        }
+                    }
+                    kline.setInterval(interval);
                     kline.setSymbol(binanceKline.getS());
                     redissonClient.getTopic(TopicConstant.kLINE).publish(kline);
                 }

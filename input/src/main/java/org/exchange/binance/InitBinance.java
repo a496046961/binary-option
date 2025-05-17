@@ -17,13 +17,14 @@ public class InitBinance {
     @Resource
     TickerHandle tickerHandle;
     @Resource
+    KlineHandle klineHandle;
+    @Resource
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     public void initBinance(Symbol symbol) {
-        Runnable runnable = () -> {
-            tickerHandle.loadTicker(symbol, umWebsocketClient);
-        };
-        threadPoolTaskExecutor.execute(runnable);
+
+        tickerHandle.loadTicker(symbol, umWebsocketClient);
+        klineHandle.loadKline(symbol, umWebsocketClient);
     }
 
 }

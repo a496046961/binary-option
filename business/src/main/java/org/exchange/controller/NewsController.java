@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("news")
@@ -26,7 +27,7 @@ public class NewsController {
     public MessageResult getNews() {
         RScoredSortedSet<NewsRequest> rScoredSortedSet = redissonClient.getScoredSortedSet(RedisKeyConstant.NEWS_CACHE);
         Collection<NewsRequest> newsRequestsList = rScoredSortedSet.readAll();
-        newsRequestsList.stream().sorted(Comparator.comparing(NewsRequest::getId));
+        newsRequestsList = newsRequestsList.stream().sorted(Comparator.comparing(NewsRequest::getId).reversed()).collect(Collectors.toList());
         return MessageResult.success(newsRequestsList);
     }
 
