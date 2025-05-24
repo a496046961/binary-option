@@ -64,7 +64,7 @@ public class Symbol implements Serializable {
     private Integer type;
 
     /**
-     * 回报率
+     * 配置时间和回报率，{"15":"0.01", "30":"0.02"}
      */
     private String returnRateConf;
 
@@ -72,6 +72,38 @@ public class Symbol implements Serializable {
      * 手续费
      */
     private BigDecimal fee;
+
+
+    /**
+     * 状态, 0:打开，1:关闭
+     */
+    private int status = 0;
+
+    /**
+     * 最大下单金额
+     */
+    private BigDecimal maxAmount = BigDecimal.valueOf(500.00);
+
+    /**
+     * 最小下单金额
+     */
+    private BigDecimal minAmount = BigDecimal.valueOf(0.00010000);
+
+    /**
+     * 排序
+     */
+    private int sort = 0;
+
+
+    /**
+     * 平仓滑点
+     */
+    private BigDecimal closeHd = BigDecimal.ZERO;
+
+    /**
+     * 开仓滑点
+     */
+    private BigDecimal openHd = BigDecimal.ZERO;
 
     public Long getId() {
         return id;
@@ -168,6 +200,54 @@ public class Symbol implements Serializable {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public BigDecimal getMaxAmount() {
+        return maxAmount;
+    }
+
+    public void setMaxAmount(BigDecimal maxAmount) {
+        this.maxAmount = maxAmount;
+    }
+
+    public BigDecimal getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(BigDecimal minAmount) {
+        this.minAmount = minAmount;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
+    public BigDecimal getCloseHd() {
+        return closeHd;
+    }
+
+    public void setCloseHd(BigDecimal closeHd) {
+        this.closeHd = closeHd;
+    }
+
+    public BigDecimal getOpenHd() {
+        return openHd;
+    }
+
+    public void setOpenHd(BigDecimal openHd) {
+        this.openHd = openHd;
     }
 
     public Symbol() {

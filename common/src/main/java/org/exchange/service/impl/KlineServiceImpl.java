@@ -2,16 +2,19 @@ package org.exchange.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.burukeyou.dataframe.iframe.SDFrame;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.exchange.constant.RedisKeyConstant;
 import org.exchange.mapper.KlineMapper;
 import org.exchange.model.Kline;
 import org.exchange.model.KlineQueryRequest;
 import org.exchange.service.KlineService;
+import org.redisson.api.RMap;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.protocol.ScoredEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -21,7 +24,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @DS("slave_1")
@@ -76,29 +81,50 @@ public class KlineServiceImpl extends ServiceImpl<KlineMapper, Kline> implements
         int page = Math.max(1, request.getPage());
         int size = Math.max(1, request.getSize());
         int offset = (page - 1) * size;
-        sql.append(" LIMIT ? OFFSET ?");
-        params.add(size);
+        sql.append(" LIMIT ?,?");
         params.add(offset);
+        params.add(size);
 
+
+        log.info("执行的k线：{}", sql.toString());
+        log.info("参数：{}", params.toString());
         // 执行查询
-        return jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(Kline.class));
+        List<Kline> klineList = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(Kline.class));
+        log.info("size:{}", klineList.size());
+        SDFrame<Kline> klines = SDFrame.read(klineList);
+
+        String key = PREFIX.concat(request.getInterval()).concat(":").concat(request.getSymbol());
+        RMap<Long, Kline> map = redissonClient.getMap(key);
+
+        List<Kline> klines1 = map.values().stream().toList();
+        klines = klines.union(klines1).distinct(Kline::getTimestamp);
+
+        return klines.toLists();
     }
 
     @Override
     public void saveKline(Kline kline) {
+        String key = PREFIX.concat(kline.getInterval()).concat(":").concat(kline.getSymbol());
+        RMap<Long, Kline> map = redissonClient.getMap(key);
 
-        RScoredSortedSet<Kline> set = redissonClient.getScoredSortedSet(PREFIX.concat(kline.getSymbol()));
+        map.put(kline.getTimestamp(), kline);
 
-        set.add(kline.getTimestamp(), kline);
-
+        if (map.size()>2) {
+            for (Long l : map.keySet()) {
+                if (l.equals(kline.getTimestamp())) {
+                    continue;
+                }
+                Kline kline1 = map.get(l);
+                this.saveOrUpdateKlineData(kline1);
+                map.remove(l);
+            }
+        }
     }
 
 
     @Override
     public void create(String tableName) {
         try {
-
-
             String sql = String.format(
                     "CREATE TABLE `binary-option-kline`.%s (" +
                             "    id BIGINT AUTO_INCREMENT PRIMARY KEY," +
@@ -174,7 +200,7 @@ public class KlineServiceImpl extends ServiceImpl<KlineMapper, Kline> implements
                         kline.getInterval(),
                         kline.getLow(),
                         kline.getOpen(),
-                        kline.getSymbol(),
+                        kline.getSymbol().toUpperCase(),
                         kline.getTimestamp(),
                         kline.getVolume(),
                         kline.getAmount()
@@ -188,8 +214,18 @@ public class KlineServiceImpl extends ServiceImpl<KlineMapper, Kline> implements
     }
 
     private boolean isTableExists(String tableName) {
+        RMap<Object, Object> map = redissonClient.getMap(RedisKeyConstant.TABLE_NAME);
+        if (map.containsKey(tableName)) {
+            return true;
+        }
+
         String sql = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, tableName);
-        return count != null && count > 0;
+
+        if (count != null && count > 0) {
+            map.put(tableName, tableName);
+            return true;
+        }
+        return false;
     }
 }

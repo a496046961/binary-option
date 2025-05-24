@@ -3,6 +3,7 @@ package org.exchange.conf;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,8 @@ public class RedissonConf {
     public RedissonClient redissonClient() {
         log.info("init RedissonClient host:{}", getHost());
         Config config = new Config();
+        // 设置JSON序列化方式
+        //config.setCodec(new JsonJacksonCodec());
         config.useSingleServer()
                 .setAddress("redis://" + getHost() + ":" + getPort())
                 .setPassword(getPassword())

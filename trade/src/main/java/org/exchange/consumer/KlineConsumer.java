@@ -45,13 +45,10 @@ public class KlineConsumer implements InitializingBean {
             @Override
             public void onMessage(CharSequence channel, Kline msg) {
                 String s = JSON.toJSONString(msg);
-                log.info("kline： {}", s);
+
                 emqxService.send(new MqttMsg(TopicConstant.kLINE, s));
 
-                Runnable r = () -> {
-                    klineService.saveOrUpdateKlineData(msg);
-                };
-                threadPoolTaskExecutor.execute(r);
+                klineService.saveKline(msg); // 存储数据
             }
         });
     }

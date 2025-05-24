@@ -1,7 +1,11 @@
 package org.exchange.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,17 +15,20 @@ public class Kline implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
      * 交易对
      */
+    @JsonIgnore
     private String symbol;
 
     /**
      * 间隔
      */
+    @JsonIgnore
     private String interval;
 
     /**
@@ -55,6 +62,7 @@ public class Kline implements Serializable {
     /**
      * 成交额
      */
+    @JsonProperty(value = "turnover")
     private BigDecimal amount;
 
 

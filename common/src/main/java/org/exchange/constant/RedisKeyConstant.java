@@ -7,4 +7,6 @@ public class RedisKeyConstant {
     public static final String NEWS_CACHE = "news";
 
     public static final String TICKER = "ticker:";
+
+    public static final String TABLE_NAME = "tableName";
 }

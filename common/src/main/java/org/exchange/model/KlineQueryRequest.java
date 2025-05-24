@@ -1,8 +1,12 @@
 package org.exchange.model;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 
 public class KlineQueryRequest implements Serializable {
+
+    @NotNull(message = "symbol required fields cannot be empty")
     private String symbol; // 必选，交易对
     private Long startTime; // 可选，开始时间戳
     private Long endTime; // 可选，结束时间戳

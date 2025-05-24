@@ -7,13 +7,13 @@ package org.exchange.constant;
 
 public enum KlineEnum {
 
-    m_1("1m", "candle1m", "1min", "kline_1_min"),
-    m_5("5m", "candle5m", "5min", "kline_5_min"),
-    m_15("15m", "candle15m", "15min", "kline_15_min"),
-    m_30("30m", "candle30m", "30min", "kline_30_min"),
-    h_1("1h", "candle1H", "1h", "kline_1_h"),
-    d_1("1d", "candle1D", "1day", "kline_1_d"),
-    w_1("1w", "candle1W", "1week", "kline_1_w"),
+    m_1("1m", "candle1m", "1m", "kline_1_min"),
+    m_5("5m", "candle5m", "5m", "kline_5_min"),
+    m_15("15m", "candle15m", "15m", "kline_15_min"),
+    m_30("30m", "candle30m", "30m", "kline_30_min"),
+    h_1("1h", "candle1H", "1H", "kline_1_h"),
+    d_1("1d", "candle1D", "1D", "kline_1_d"),
+    w_1("1w", "candle1W", "1W", "kline_1_w"),
     ;
 
     private String interval;
@@ -21,6 +21,8 @@ public enum KlineEnum {
     private String bitgitInterval;
 
     private String bitgitInterval_api;
+
+    private String investingInterval;
 
     private String binanceInterval;
 
